@@ -2,6 +2,8 @@
 	"use strict";
 
 	var User = module.parent.require('./user'),
+		async = module.parent.require('async'),
+		winston = module.parent.require('winston'),
 		meta = module.parent.require('./meta'),
 		db = module.parent.require('../src/database'),
 		passport = module.parent.require('passport'),
@@ -131,7 +133,22 @@
 		});
 
 		callback(null, custom_header);
-	}
+	};
+
+	Google.deleteUserData = function(uid, callback) {
+		async.waterfall([
+			async.apply(User.getUserField, uid, 'gplusid'),
+			function(oAuthIdToDelete, next) {
+				db.deleteObjectField('gplusid:uid', oAuthIdToDelete, next);
+			}
+		], function(err) {
+			if (err) {
+				winston.error('[sso-google] Could not remove OAuthId data for uid ' + uid + '. Error: ' + err);
+				return callback(err);
+			}
+			callback(null, uid);
+		});
+	};
 
 	module.exports = Google;
 }(module));
