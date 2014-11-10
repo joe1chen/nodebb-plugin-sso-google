@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-sso-google",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "NodeBB Google SSO",
   "main": "library.js",
   "repository": {
@@ -28,5 +28,8 @@
   "dependencies": {
     "passport-google-oauth": "~0.1.5",
     "shortid": "^2.1.2"
+  },
+  "nbbpm": {
+    "compatibility": "^0.6.0"
   }
 }
